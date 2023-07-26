@@ -5,8 +5,7 @@
   "refmap": "hyle.refmap.json",
   "minVersion": "0.8",
   "mixins": [
-    "MixinServerLevel",
-    "NoiseBasedChunkGeneratorAccessor"
+    "MixinServerLevel"
   ],
   "injectors": {
     "defaultRequire": 1
