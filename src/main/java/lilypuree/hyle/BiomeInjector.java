@@ -2,14 +2,14 @@ package lilypuree.hyle;
 
 import com.google.common.base.Suppliers;
 import com.google.common.collect.ImmutableList;
-import lilypuree.hyle.core.HyleNames;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.tags.BiomeTags;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeSource;
+import net.minecraft.world.level.biome.FeatureSorter;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import org.apache.logging.log4j.Level;
@@ -21,14 +21,14 @@ import java.util.stream.Collectors;
 public class BiomeInjector {
 
     public static void apply(BiomeSource source) {
-        source.featuresPerStep = Suppliers.memoize(() -> source.buildFeaturesPerStep(source.possibleBiomes().stream().toList(), true));
+        Suppliers.memoize(() -> FeatureSorter.buildFeaturesPerStep(source.possibleBiomes().stream().toList(), biomeHolder -> biomeHolder.get().getGenerationSettings().features(), true));
     }
 
     public static void apply(RegistryAccess registryAccess) {
         Constants.LOG.log(Level.INFO, "Hyle stone replacer injection started.");
         long start = System.currentTimeMillis();
         Registry<Biome> biomeRegistry = registryAccess.registryOrThrow(Registry.BIOME_REGISTRY);
-        PlacedFeature STONE_REPLACER = registryAccess.registryOrThrow(Registry.PLACED_FEATURE_REGISTRY).get(HyleNames.STONE_REPLACER);
+        PlacedFeature STONE_REPLACER = registryAccess.registryOrThrow(Registry.PLACED_FEATURE_REGISTRY).get(new ResourceLocation("hyle", "stone_replacer"));
         for (Biome biome : biomeRegistry) {
             addFeatureToBiome(biome, GenerationStep.Decoration.TOP_LAYER_MODIFICATION, STONE_REPLACER);
         }

@@ -12,9 +12,12 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.FixedBiomeSource;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.dimension.DimensionType;
+import net.minecraft.world.level.dimension.LevelStem;
 import net.minecraft.world.level.storage.LevelStorageSource;
 import net.minecraft.world.level.storage.ServerLevelData;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -25,11 +28,15 @@ import java.util.concurrent.Executor;
 @Mixin(ServerLevel.class)
 public abstract class MixinServerLevel {
 
+    @Shadow @Final private MinecraftServer server;
+
     @Inject(method = "<init>", at = @At("RETURN"))
-    private void onInit(MinecraftServer server, Executor executor, LevelStorageSource.LevelStorageAccess p_203764_, ServerLevelData serverLevelData, ResourceKey<Level> key, Holder<DimensionType> dimensionTypeHolder, ChunkProgressListener p_203768_, ChunkGenerator generator, boolean p_203770_, long p_203771_, List<CustomSpawner> p_203772_, boolean p_203773_, CallbackInfo ci) {
+    private void onInit(MinecraftServer server, Executor pDispatcher, LevelStorageSource.LevelStorageAccess pLevelStorageAccess, ServerLevelData pServerLevelData, ResourceKey key, LevelStem pLevelStem, ChunkProgressListener pProgressListener, boolean pIsDebug, long pSeed, List pCustomSpawners, boolean pTickTime, CallbackInfo ci) {
         if (key.equals(Level.OVERWORLD) && !Constants.CONFIG.disableReplacement()) {
             Constants.LOG.log(org.apache.logging.log4j.Level.INFO, "Hyle biomesource cache modification started");
             long start = System.currentTimeMillis();
+
+            ChunkGenerator generator = pLevelStem.generator();
 
             if (generator.biomeSource instanceof FixedBiomeSource) {
                 BiomeInjector.apply(server.registryAccess());

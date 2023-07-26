@@ -10,10 +10,7 @@ import com.google.gson.JsonObject;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.core.Registry;
-import net.minecraft.data.BlockFamily;
-import net.minecraft.data.DataGenerator;
-import net.minecraft.data.DataProvider;
-import net.minecraft.data.HashCache;
+import net.minecraft.data.*;
 import net.minecraft.data.recipes.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
@@ -72,7 +69,7 @@ public abstract class RecipeProviderAccessor implements DataProvider {
     }
 
     @Override
-    public void run(HashCache cache) {
+    public void run(CachedOutput cache) {
         Path path = this.generator.getOutputFolder();
         Set<ResourceLocation> recipeIds = Sets.newHashSet();
         buildCraftingRecipes((finishedRecipe) -> {
@@ -89,11 +86,11 @@ public abstract class RecipeProviderAccessor implements DataProvider {
         saveAdvancement(cache, Advancement.Builder.advancement().addCriterion("impossible", new ImpossibleTrigger.TriggerInstance()).serializeToJson(), path.resolve("data/minecraft/advancements/recipes/root.json"));
     }
 
-    private static void saveRecipe(HashCache cache, JsonObject serializedRecipe, Path path) {
+    private static void saveRecipe(CachedOutput cache, JsonObject serializedRecipe, Path path) {
         try {
-            String serialized = GSON.toJson((JsonElement) serializedRecipe);
-            String encoded = SHA1.hashUnencodedChars(serialized).toString();
-            if (!Objects.equals(cache.getHash(path), encoded) || !Files.exists(path)) {
+            String serialized = GSON.toJson(serializedRecipe);
+            String encoded = serialized.toString();
+            if (!Objects.equals(path, encoded) || !Files.exists(path)) {
                 Files.createDirectories(path.getParent());
                 BufferedWriter $$5 = Files.newBufferedWriter(path);
 
@@ -116,17 +113,16 @@ public abstract class RecipeProviderAccessor implements DataProvider {
                 }
             }
 
-            cache.putNew(path, encoded);
         } catch (IOException var10) {
             LOGGER.error("Couldn't save recipe {}", path, var10);
         }
     }
 
-    private static void saveAdvancement(HashCache $$0, JsonObject $$1, Path $$2) {
+    private static void saveAdvancement(CachedOutput $$0, JsonObject $$1, Path $$2) {
         try {
-            String $$3 = GSON.toJson((JsonElement) $$1);
-            String $$4 = SHA1.hashUnencodedChars($$3).toString();
-            if (!Objects.equals($$0.getHash($$2), $$4) || !Files.exists($$2)) {
+            String $$3 = GSON.toJson($$1);
+            String $$4 = $$3.toString();
+            if (!Objects.equals($$2, $$4) || !Files.exists($$2)) {
                 Files.createDirectories($$2.getParent());
                 BufferedWriter $$5 = Files.newBufferedWriter($$2);
 
@@ -149,7 +145,6 @@ public abstract class RecipeProviderAccessor implements DataProvider {
                 }
             }
 
-            $$0.putNew($$2, $$4);
         } catch (IOException var10) {
             LOGGER.error("Couldn't save recipe advancement {}", $$2, var10);
         }
