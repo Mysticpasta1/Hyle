@@ -1,7 +1,6 @@
 package lilypuree.hyle.world.feature;
 
 import lilypuree.hyle.Constants;
-import lilypuree.hyle.mixin.NoiseBasedChunkGeneratorAccessor;
 import lilypuree.hyle.world.feature.gen.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.WorldGenLevel;
@@ -23,7 +22,7 @@ public class StoneReplacer extends Feature<StoneReplacerConfiguration> {
 
     private boolean canReplace(ChunkGenerator generator) {
         if (generator instanceof NoiseBasedChunkGenerator nbcg) {
-            return ((NoiseBasedChunkGeneratorAccessor) (Object) nbcg).getDefaultBlock().is(Blocks.STONE);
+            return nbcg.defaultBlock.is(Blocks.STONE);
         }
         return false;
     }
