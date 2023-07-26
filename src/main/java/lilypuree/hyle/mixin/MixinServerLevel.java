@@ -27,9 +27,6 @@ import java.util.concurrent.Executor;
 
 @Mixin(ServerLevel.class)
 public abstract class MixinServerLevel {
-
-    @Shadow @Final private MinecraftServer server;
-
     @Inject(method = "<init>", at = @At("RETURN"))
     private void onInit(MinecraftServer server, Executor pDispatcher, LevelStorageSource.LevelStorageAccess pLevelStorageAccess, ServerLevelData pServerLevelData, ResourceKey key, LevelStem pLevelStem, ChunkProgressListener pProgressListener, boolean pIsDebug, long pSeed, List pCustomSpawners, boolean pTickTime, CallbackInfo ci) {
         if (key.equals(Level.OVERWORLD) && !Constants.CONFIG.disableReplacement()) {
