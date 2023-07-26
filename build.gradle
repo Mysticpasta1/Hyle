@@ -139,7 +139,7 @@ dependencies {
     // Base
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
-    implementation fg.deobf('net.openhft:zero-allocation-hashing:0.15')
+    library fg.deobf('net.openhft:zero-allocation-hashing:0.15')
 
     implementation fg.deobf("me.shedaniel.cloth:cloth-config-forge:${cloth_config_version}")
     implementation fg.deobf("curse.maven:cyanide_forge-348521:${cyanide_version}")
