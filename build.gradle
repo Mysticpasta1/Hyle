@@ -4,6 +4,7 @@ plugins {
     id 'org.spongepowered.mixin' version '0.7.+'
     id 'eclipse'
     id 'maven-publish'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
 }
 
 archivesBaseName = archivesBaseName
@@ -167,6 +168,21 @@ jar {
 }
 
 jar.finalizedBy('reobfJar')
+
+shadowJar {
+    archiveClassifier = ''
+    configurations = [project.configurations.shade]
+    relocate 'net.openhft', "${project.group}.shadow.net.openhft" // ensure repackaged packages have unique names
+    finalizedBy 'reobfShadowJar'
+}
+
+artifacts {
+    shadowJar
+}
+
+reobf {
+    shadowJar {}
+}
 
 publishing {
     publications {
