@@ -180,10 +180,6 @@ artifacts {
     shadowJar
 }
 
-reobf {
-    shadowJar {}
-}
-
 publishing {
     publications {
         mavenJava(MavenPublication) {
