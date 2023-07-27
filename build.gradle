@@ -120,14 +120,17 @@ repositories {
     }
 }
 
+jarJar.enable()
+tasks.named("jarJar") {}
+
 dependencies {
     // Base
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
-    compileOnly fg.deobf("com.github.OpenHFT:Zero-Allocation-Hashing:zero-allocation-hashing-0.16")
-
     implementation fg.deobf("me.shedaniel.cloth:cloth-config-forge:${cloth_config_version}")
     implementation fg.deobf("curse.maven:cyanide_forge-348521:${cyanide_version}")
+    implementation group: "net.openhft", name: "zero-allocation-hashing", version: "0.16"
+    jarJar (group: "net.openhft", name: "zero-allocation-hashing", version: "[0.16, )")
 }
 
 mixin {
@@ -156,6 +159,8 @@ jar.finalizedBy('reobfJar')
 publishing {
     publications {
         mavenJava(MavenPublication) {
+            from components.java
+            jarJar.component(it)
             artifact jar
         }
     }
