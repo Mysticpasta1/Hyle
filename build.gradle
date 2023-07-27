@@ -103,6 +103,7 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 repositories {
     mavenCentral()
+    maven { url 'https://www.jitpack.io' }
     maven {
         name = "CurseForge Maven" //Base
         url = "https://www.cursemaven.com"
@@ -119,28 +120,11 @@ repositories {
     }
 }
 
-configurations {
-    shade
-    implementation.extendsFrom shade
-}
-
-configurations {
-    library
-    implementation.extendsFrom library
-    shade.extendsFrom library
-}
-
-minecraft.runs.all {
-    lazyToken('minecraft_classpath') {
-        configurations.library.copyRecursive().resolve().collect { it.absolutePath }.join(File.pathSeparator)
-    }
-}
-
 dependencies {
     // Base
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
-    library 'net.openhft:zero-allocation-hashing:0.15'
+    compileOnly fg.deobf("com.github.OpenHFT:Zero-Allocation-Hashing:zero-allocation-hashing-0.16")
 
     implementation fg.deobf("me.shedaniel.cloth:cloth-config-forge:${cloth_config_version}")
     implementation fg.deobf("curse.maven:cyanide_forge-348521:${cyanide_version}")
@@ -168,17 +152,6 @@ jar {
 }
 
 jar.finalizedBy('reobfJar')
-
-shadowJar {
-    archiveClassifier = ''
-    configurations = [project.configurations.shade]
-    relocate 'net.openhft', "${project.group}.shadow.net.openhft" // ensure repackaged packages have unique names
-    finalizedBy 'reobfShadowJar'
-}
-
-artifacts {
-    shadowJar
-}
 
 publishing {
     publications {
