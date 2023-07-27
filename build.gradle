@@ -159,8 +159,6 @@ jar.finalizedBy('reobfJar')
 publishing {
     publications {
         mavenJava(MavenPublication) {
-            from components.java
-            jarJar.component(it)
             artifact jar
         }
     }
