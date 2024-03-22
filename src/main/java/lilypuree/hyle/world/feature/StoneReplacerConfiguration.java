@@ -4,12 +4,16 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import lilypuree.hyle.Constants;
 import lilypuree.hyle.misc.HyleDataLoaders;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.HashSet;
 import java.util.List;
@@ -20,12 +24,12 @@ public class StoneReplacerConfiguration implements FeatureConfiguration {
 
     public static final Codec<StoneReplacerConfiguration> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             BiomeBasedReplacer.CODEC.listOf().fieldOf("biome_replacers").forGetter(x -> x.biomeBasedReplacers),
-            RegistryOps.retrieveRegistry(Registry.BIOME_REGISTRY).forGetter((x) -> x.biomeRegistry),
+            RegistryOps.retrieveRegistryLookup(Registries.BIOME).forGetter((x) -> x.biomeRegistry),
             ResourceLocation.CODEC.listOf().fieldOf("regions").forGetter(x -> x.regions),
             Frequencies.CODEC.fieldOf("frequencies").forGetter(x -> x.frequencies)
     ).apply(instance, StoneReplacerConfiguration::new));
 
-    public StoneReplacerConfiguration(List<BiomeBasedReplacer> biomeBasedReplacers, Registry<Biome> biomes, List<ResourceLocation> regions, Frequencies frequencies) {
+    public StoneReplacerConfiguration(List<BiomeBasedReplacer> biomeBasedReplacers, HolderLookup.RegistryLookup<Biome> biomes, List<ResourceLocation> regions, Frequencies frequencies) {
         this.biomeBasedReplacers = biomeBasedReplacers;
         this.biomeRegistry = biomes;
         this.regions = regions;
@@ -33,7 +37,7 @@ public class StoneReplacerConfiguration implements FeatureConfiguration {
     }
 
     private final List<BiomeBasedReplacer> biomeBasedReplacers;
-    private final Registry<Biome> biomeRegistry;
+    private final HolderLookup.RegistryLookup<Biome> biomeRegistry;
     private final List<ResourceLocation> regions;
     private final Frequencies frequencies;
 
@@ -48,9 +52,9 @@ public class StoneReplacerConfiguration implements FeatureConfiguration {
     }
 
     public BiomeBasedReplacer getForBiome(Biome biome) {
-        return biomeRegistry.getResourceKey(biome).map(key -> {
+        return Optional.ofNullable(ForgeRegistries.BIOMES.getKey(biome)).map(key -> {
             for (BiomeBasedReplacer replacer : biomeBasedReplacers) {
-                if (replacer.apply(key)) return replacer;
+                if (replacer.apply(ForgeRegistries.BIOMES.getResourceKey(biome).orElse(Biomes.OCEAN))) return replacer;
             }
             return BiomeBasedReplacer.NONE;
         }).orElse(BiomeBasedReplacer.NONE);

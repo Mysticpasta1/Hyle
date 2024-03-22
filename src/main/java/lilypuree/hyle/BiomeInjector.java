@@ -6,6 +6,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeSource;
@@ -27,8 +28,8 @@ public class BiomeInjector {
     public static void apply(RegistryAccess registryAccess) {
         Constants.LOG.log(Level.INFO, "Hyle stone replacer injection started.");
         long start = System.currentTimeMillis();
-        Registry<Biome> biomeRegistry = registryAccess.registryOrThrow(Registry.BIOME_REGISTRY);
-        PlacedFeature STONE_REPLACER = registryAccess.registryOrThrow(Registry.PLACED_FEATURE_REGISTRY).get(new ResourceLocation("hyle", "stone_replacer"));
+        Registry<Biome> biomeRegistry = registryAccess.registryOrThrow(Registries.BIOME);
+        PlacedFeature STONE_REPLACER = registryAccess.registryOrThrow(Registries.PLACED_FEATURE).get(new ResourceLocation("hyle", "stone_replacer"));
         for (Biome biome : biomeRegistry) {
             addFeatureToBiome(biome, GenerationStep.Decoration.TOP_LAYER_MODIFICATION, STONE_REPLACER);
         }

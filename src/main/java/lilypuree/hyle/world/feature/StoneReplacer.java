@@ -22,7 +22,7 @@ public class StoneReplacer extends Feature<StoneReplacerConfiguration> {
 
     private boolean canReplace(ChunkGenerator generator) {
         if (generator instanceof NoiseBasedChunkGenerator nbcg) {
-            return nbcg.defaultBlock.is(Blocks.STONE);
+            return nbcg.generatorSettings().get().defaultBlock().is(Blocks.STONE);
         }
         return false;
     }
@@ -81,7 +81,7 @@ public class StoneReplacer extends Feature<StoneReplacerConfiguration> {
                 int height = heights[x][z];
                 for (int posY = minY; posY <= height; posY++) {
                     int sectionIndex = chunkAccess.getSectionIndex(posY);
-                    if (chunkAccess.getSectionIndex(chunkSection.bottomBlockY()) != sectionIndex) {
+                    if (chunkAccess.getSectionIndex(minY) != sectionIndex) {
                         chunkSection = chunkAccess.getSection(sectionIndex);
                     }
                     if (chunkSection.hasOnlyAir()) continue;
