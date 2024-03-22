@@ -128,7 +128,7 @@ dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
     implementation fg.deobf("me.shedaniel.cloth:cloth-config-forge:${cloth_config_version}")
-    implementation fg.deobf("curse.maven:cyanide_forge-348521:${cyanide_version}")
+    implementation fg.deobf("curse.maven:cyanide_forge-541676:${cyanide_version}")
     implementation group: "net.openhft", name: "zero-allocation-hashing", version: "0.16"
     jarJar (group: "net.openhft", name: "zero-allocation-hashing", version: "[0.16, )")
 }
