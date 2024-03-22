@@ -5,6 +5,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class HyleTags {
 
@@ -23,7 +24,7 @@ public class HyleTags {
             HyleTags.Blocks.REPLACE_GRASS = create("replace_grass");
         }
         private static TagKey<Block> create(String name){
-            return TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation(Constants.MOD_ID, name));
+            return TagKey.create(ForgeRegistries.BLOCKS.getRegistryKey(), new ResourceLocation(Constants.MOD_ID, name));
         }
     }
 }

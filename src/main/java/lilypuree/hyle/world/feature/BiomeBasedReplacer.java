@@ -5,6 +5,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import lilypuree.hyle.world.feature.gen.StoneType;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.biome.Biome;
 
@@ -16,7 +17,7 @@ public class BiomeBasedReplacer {
 
     public static final BiomeBasedReplacer NONE = new BiomeBasedReplacer(Collections.emptyList(), Collections.emptyList());
     public static final Codec<BiomeBasedReplacer> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            ResourceKey.codec(Registry.BIOME_REGISTRY).listOf().fieldOf("biomes").forGetter(x -> x.biomes),
+            ResourceKey.codec(Registries.BIOME).listOf().fieldOf("biomes").forGetter(x -> x.biomes),
             Strata.CODEC.listOf().fieldOf("stratum").forGetter(x -> x.stratas)
     ).apply(instance, BiomeBasedReplacer::new));
 

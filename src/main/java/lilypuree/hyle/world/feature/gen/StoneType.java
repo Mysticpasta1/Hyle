@@ -15,6 +15,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -31,11 +32,11 @@ public class StoneType implements IStoneType {
     };
 
     private static final Codec<BlockState> BLOCK_OR_BLOCKSTATE_CODEC = Codec.either(ResourceLocation.CODEC.comapFlatMap(loc ->
-                    Registry.BLOCK.getOptional(loc).map(DataResult::success).orElse(DataResult.error(String.format("block %s doesn't exist!", loc))), Registry.BLOCK::getKey), BlockState.CODEC)
+                    Optional.ofNullable(ForgeRegistries.BLOCKS.getValue(loc)).map(DataResult::success).orElse(DataResult.error(() -> String.format("block %s doesn't exist!", loc))), ForgeRegistries.BLOCKS::getKey), BlockState.CODEC)
             .xmap(either -> either.map(Block::defaultBlockState, b -> b), Either::right);
     public static final Codec<StoneType> CODEC = Codec.STRING.comapFlatMap(string -> {
         StoneType stoneType = HyleDataLoaders.getStoneType(string);
-        if (stoneType == null) return DataResult.error("Stone type " + string + " doesn't exist!", StoneType.NO_REPLACE);
+        if (stoneType == null) return DataResult.error(() -> "Stone type " + string + " doesn't exist!", StoneType.NO_REPLACE);
         else return DataResult.success(stoneType);
     }, HyleDataLoaders::getNameForStoneType);
 
@@ -55,7 +56,7 @@ public class StoneType implements IStoneType {
         this.grassReplace = Constants.CONFIG.disableDirtReplacement() ? null : grassReplace.orElse(null);
         this.oreMap = new HashMap<>();
         oreMap.forEach((key, blockState) -> {
-            Block block = Registry.BLOCK.get(key);
+            Block block = ForgeRegistries.BLOCKS.getValue(key);
             this.oreMap.put(block, blockState);
         });
         this.ignoreBiome = ignoreBiome;
@@ -92,7 +93,7 @@ public class StoneType implements IStoneType {
     private Map<ResourceLocation, BlockState> getOreMapInner() {
         Map<ResourceLocation, BlockState> newMap = new HashMap<>();
         oreMap.forEach((block, state) -> {
-            newMap.put(Registry.BLOCK.getKey(block), state);
+            newMap.put(ForgeRegistries.BLOCKS.getKey(block), state);
         });
         return newMap;
     }
