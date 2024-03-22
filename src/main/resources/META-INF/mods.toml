@@ -1,5 +1,5 @@
 modLoader="javafml" #mandatory
-loaderVersion="[38,)"
+loaderVersion="[47,)"
 license="LGPLv3"
 
 [[mods]] #mandatory
@@ -14,15 +14,15 @@ description='''
 A versatile underground stone replacer library
 '''
 
-[[dependencies.decapitation]] #optional
+[[dependencies.hyle]] #optional
     modId="forge" #mandatory
     mandatory=true #mandatory
-    versionRange="[38,)" #mandatory
+    versionRange="[47,)" #mandatory
     ordering="NONE"
     side="BOTH"
-[[dependencies.decapitation]]
+[[dependencies.hyle]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.18,)"
+    versionRange="[1.20.1, 1.20.2)"
     ordering="NONE"
     side="BOTH"
