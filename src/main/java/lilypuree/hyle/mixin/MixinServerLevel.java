@@ -7,6 +7,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.progress.ChunkProgressListener;
+import net.minecraft.world.RandomSequences;
 import net.minecraft.world.level.CustomSpawner;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.FixedBiomeSource;
@@ -28,7 +29,7 @@ import java.util.concurrent.Executor;
 @Mixin(ServerLevel.class)
 public abstract class MixinServerLevel {
     @Inject(method = "<init>", at = @At("RETURN"))
-    private void onInit(MinecraftServer server, Executor pDispatcher, LevelStorageSource.LevelStorageAccess pLevelStorageAccess, ServerLevelData pServerLevelData, ResourceKey key, LevelStem pLevelStem, ChunkProgressListener pProgressListener, boolean pIsDebug, long pSeed, List pCustomSpawners, boolean pTickTime, CallbackInfo ci) {
+    private void onInit(MinecraftServer server, Executor pDispatcher, LevelStorageSource.LevelStorageAccess pLevelStorageAccess, ServerLevelData pServerLevelData, ResourceKey key, LevelStem pLevelStem, ChunkProgressListener pProgressListener, boolean pIsDebug, long pBiomeZoomSeed, List pCustomSpawners, boolean pTickTime, RandomSequences pRandomSequences, CallbackInfo ci) {
         if (key.equals(Level.OVERWORLD) && !Constants.CONFIG.disableReplacement()) {
             Constants.LOG.log(org.apache.logging.log4j.Level.INFO, "Hyle biomesource cache modification started");
             long start = System.currentTimeMillis();
