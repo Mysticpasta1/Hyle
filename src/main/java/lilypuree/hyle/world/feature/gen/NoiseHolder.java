@@ -120,4 +120,8 @@ public class NoiseHolder {
         regionNoise.SetCellularReturnType(FastNoiseLite.CellularReturnType.CellValue);
         regionNoise.SetFrequency(regionFrequency);
     }
+
+    public static float getRegionNoise(int posX, int posZ) {
+        return regionNoise.GetNoise(posX, posZ);
+    }
 }

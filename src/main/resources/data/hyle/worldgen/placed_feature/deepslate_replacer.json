@@ -1,0 +1,14 @@
+{
+  "feature": "hyle:deepslate_replacer",
+  "placement": [
+    {
+      "type": "height_range",
+      "height": {
+        "type": "constant",
+        "value": {
+          "absolute": -64
+        }
+      }
+    }
+  ]
+}

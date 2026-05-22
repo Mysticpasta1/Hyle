@@ -31,7 +31,7 @@ public class StoneType implements IStoneType {
         }
     };
 
-    private static final Codec<BlockState> BLOCK_OR_BLOCKSTATE_CODEC = Codec.either(ResourceLocation.CODEC.comapFlatMap(loc ->
+    protected static final Codec<BlockState> BLOCK_OR_BLOCKSTATE_CODEC = Codec.either(ResourceLocation.CODEC.comapFlatMap(loc ->
                     Optional.ofNullable(ForgeRegistries.BLOCKS.getValue(loc)).map(DataResult::success).orElse(DataResult.error(() -> String.format("block %s doesn't exist!", loc))), ForgeRegistries.BLOCKS::getKey), BlockState.CODEC)
             .xmap(either -> either.map(Block::defaultBlockState, b -> b), Either::right);
     public static final Codec<StoneType> CODEC = Codec.STRING.comapFlatMap(string -> {

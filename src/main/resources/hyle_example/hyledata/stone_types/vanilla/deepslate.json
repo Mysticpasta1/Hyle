@@ -1,0 +1,17 @@
+{
+  "base": "minecraft:calcite",
+  "deepslate": "minecraft:smooth_basalt",
+  "cobble": "minecraft:calcite",
+  "dirt": "minecraft:calcite",
+  "grass": "minecraft:calcite",
+  "ores": {
+    "minecraft:iron_ore": "minecraft:iron_ore",
+    "minecraft:coal_ore": "minecraft:coal_ore",
+    "minecraft:copper_ore": "minecraft:copper_ore",
+    "minecraft:gold_ore": "minecraft:gold_ore",
+    "minecraft:lapis_ore": "minecraft:lapis_ore",
+    "minecraft:redstone_ore": "minecraft:redstone_ore",
+    "minecraft:diamond_ore": "minecraft:diamond_ore",
+    "minecraft:emerald_ore": "minecraft:emerald_ore"
+  }
+}

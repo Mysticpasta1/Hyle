@@ -30,8 +30,10 @@ public class BiomeInjector {
         long start = System.currentTimeMillis();
         Registry<Biome> biomeRegistry = registryAccess.registryOrThrow(Registries.BIOME);
         PlacedFeature STONE_REPLACER = registryAccess.registryOrThrow(Registries.PLACED_FEATURE).get(new ResourceLocation("hyle", "stone_replacer"));
+        PlacedFeature DEEPSLATE_REPLACER = registryAccess.registryOrThrow(Registries.PLACED_FEATURE).get(new ResourceLocation("hyle", "deepslate_replacer"));
         for (Biome biome : biomeRegistry) {
             addFeatureToBiome(biome, GenerationStep.Decoration.LOCAL_MODIFICATIONS, STONE_REPLACER);
+            addFeatureToBiome(biome, GenerationStep.Decoration.LOCAL_MODIFICATIONS, DEEPSLATE_REPLACER);
         }
         long timeTook = System.currentTimeMillis() - start;
         Constants.LOG.log(Level.INFO, "Hyle stone replacer injection took {} ms to complete.", timeTook);
